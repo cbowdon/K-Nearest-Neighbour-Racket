@@ -1,10 +1,13 @@
 #lang typed/racket/base
 
 (require racket/file)
+(require racket/list)
 (require racket/function)
 
 (provide csv->cells
 		 Opt
+		 None
+		 Some
 		 string->opt-num
 		 print-opt
 		 Labelled
@@ -41,10 +44,13 @@
 (: make-labelled ((Listof String) [#:fix LabelFix] -> Labelled))
 (define (make-labelled lstr #:fix [fix 'pre])
   (cond [(eq? fix 'pre) 
-		 (Labelled (car lstr) (map string->opt-num (cdr lstr)))]
+		 (Labelled (car lstr) 
+				   (map string->opt-num (cdr lstr)))]
 		[(eq? fix 'post) 
-		 (Labelled "Hello" (list (Some 1)))]))
+		 (let ([len (- (length lstr) 1)])
+		   (Labelled (list-ref lstr len)
+					 (map string->opt-num (take lstr len))))]))
 
 (: print-labelled (Labelled -> Void))
 (define (print-labelled lab)
-  (printf "Labelled [\"~s\" ~a]\n" (Labelled-label lab) (Labelled-data lab))) 
+  (printf "Labelled [~s ~a]\n" (Labelled-label lab) (Labelled-data lab))) 
