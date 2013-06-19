@@ -1,6 +1,7 @@
 #lang typed/racket/base
 
 (require "typed-csv.rkt")
+(require "selection.rkt")
 
 (: euclidean-dist ((Listof (Opt Number)) (Listof (Opt Number)) -> (Opt Number)))
 (define (euclidean-dist pt0 pt1)

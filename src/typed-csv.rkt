@@ -3,6 +3,7 @@
 (require racket/file)
 (require racket/list)
 (require racket/function)
+(require racket/match)
 
 (provide csv->cells
 		 Opt
@@ -33,8 +34,10 @@
 
 (: print-opt (All (a) ((Opt a) -> Void)))
 (define (print-opt opt)
-  (cond [(None? opt) (printf "None\n")]
-		[(Some? opt) (printf "Some ~a\n" (Some-value opt))]))
+	(match opt
+		   [(Some a) (printf "Some ~a\n" a)]
+		   [(None) (printf "None\n")]))
+
 
 ;; Labelled type
 (struct: Labelled ([label : String] [data : (Listof (Opt Number))]))
@@ -54,3 +57,6 @@
 (: print-labelled (Labelled -> Void))
 (define (print-labelled lab)
   (printf "Labelled [~s ~a]\n" (Labelled-label lab) (Labelled-data lab))) 
+
+(print-opt (Some 10))
+(print-opt (None))
