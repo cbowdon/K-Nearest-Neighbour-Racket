@@ -1,7 +1,11 @@
 SOURCES = src/main.rkt
+TESTS = src/test.rkt
 OUTPUT = knn
 
 all: $(SOURCES)
+	racket $^
+
+test: $(TESTS)
 	racket $^
 
 run: exe

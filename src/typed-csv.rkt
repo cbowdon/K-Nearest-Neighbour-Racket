@@ -57,6 +57,3 @@
 (: print-labelled (Labelled -> Void))
 (define (print-labelled lab)
   (printf "Labelled [~s ~a]\n" (Labelled-label lab) (Labelled-data lab))) 
-
-(print-opt (Some 10))
-(print-opt (None))
