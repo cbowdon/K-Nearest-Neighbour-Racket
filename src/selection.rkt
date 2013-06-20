@@ -13,7 +13,7 @@
   (let ([p (list-ref lst pivot)])
 	(: qs-iter ((Listof a) (Listof a) (Listof a) -> (Listof a)))
 	(define (qs-iter in less greater)
-	  (cond [(null? in) (append less (list p) greater)]
+	  (cond [(null? in) (append less greater)]
 			[(comp (car in) p) (qs-iter (cdr in) (cons (car in) less) greater)]
 			[(qs-iter (cdr in) less (cons (car in) greater))]))
 	(qs-iter lst '() '())))

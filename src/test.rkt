@@ -13,5 +13,9 @@
 	  (take result 4)
 	  (list 0.1 1.0 3.0 2.0))
 	(check-equal?
-	  (drop result 5)
+	  (drop result 4)
 	  (list 4.0 9.0 4.0 8.0 5.0))))
+
+(test-case
+  "quick-sort1 on a 1-element list"
+  (check-equal? (quick-sort1 (list 1.0) < 0) (list 1.0)))
