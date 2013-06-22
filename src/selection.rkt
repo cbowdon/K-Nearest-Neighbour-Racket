@@ -7,11 +7,11 @@
 		 ;quick-select
 		 nth-element)
 
-(: nth-element (All (a) ((Listof a) Nonnegative-Integer (a a -> Boolean) -> (Listof a))))
+(: nth-element (All (a) ((Listof a) Index (a a -> Boolean) -> (Listof a))))
 (define (nth-element lst n comp)
   '())
 
-(: quick-sort1 (All (a) ((Listof a) Nonnegative-Integer (a -> Real) -> (Values (Listof a) (Listof a) (Listof a)))))
+(: quick-sort1 (All (a) ((Listof a) Index (a -> Real) -> (Values (Listof a) (Listof a) (Listof a)))))
 (define (quick-sort1 lst pivot sel)
   (let ([p (list-ref lst pivot)])
 	(: qs-iter ((Listof a) (Listof a) (Listof a) (Listof a) -> (Values (Listof a) (Listof a) (Listof a))))
@@ -25,15 +25,26 @@
 			 (qs-iter (cdr in) less (cons (car in) eq) greater)]))
 	(qs-iter lst '() '() '())))
 
-
-#|
-(: quick-select (All (a) ((Listof a) Nonnegative-Integer (a a -> Boolean) (Listof a) -> (Listof a))))
-(define (quick-select lst n comp other)
-  (let-values ([(lt gt) (quick-sort1 lst n comp)])
-	(cond [(= n (length lt)) (append lt other)] 
-		  [(> n (length lt)) (quick-select gt n comp (append lt other))]
-		  [else (quick-select lt n comp (append other gt))])))
-|#
+(: quick-select (All (a) ((Listof a) Index (a -> Real) -> (Listof a))))
+(define (quick-select lst n sel)
+  (: qs-iter ((Listof a) (Listof a) (Listof a) -> (Listof a)))
+  (define (qs-iter working lower higher)
+	(define p (quotient (length working) 2))
+	(define-values (lt eq gt) (quick-sort1 working p sel))
+	(define pivot-new-index (length lt))
+	(cond [(= pivot-new-index n)
+		   (begin
+			 (printf "equal\n")
+			 (append lt eq gt))]
+		  [(> pivot-new-index n)
+		   (begin
+			 (printf "lt\n")
+			 (qs-iter lt lower (append eq gt higher)))]
+		  [else
+		   (begin
+			 (printf "gt\n")
+			 (qs-iter (append eq gt) (append lower lt) higher))]))
+  '())
 
 ; nth element is index 2
 ; should be 3
@@ -55,11 +66,6 @@
 
 (printf "~a ~a ~a\n" lt eq gt)
 
-#|
-If pivot-new-index = n, done - append lists and return
-If pivot-new-index > n, partition lt
-If pivot-new-index < n, partition eq+gt
-|#
 
 (cond [(= pivot-new-index n)
 	   (begin
