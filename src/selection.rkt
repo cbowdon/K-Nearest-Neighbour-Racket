@@ -2,7 +2,8 @@
 
 (provide quick-sort1
 		 quick-select
-		 nth-element)
+		 nth-element
+		 modal)
 
 (: nth-element (All (a) ((Listof a) Index (a -> Real) -> (Listof a))))
 (define (nth-element lst n sel)
@@ -37,3 +38,8 @@
 		   (append lower lt eq gt higher)]
 		  [else (qs-iter (append eq gt) (append lower lt) higher)]))
   (qs-iter lst '() '()))
+
+(: modal (All (a b) ((Listof a) (a -> b) -> a)))
+(define (modal lst sel)
+  ; TODO
+  (car lst))

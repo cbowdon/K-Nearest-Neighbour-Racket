@@ -3,7 +3,9 @@
 (require "typed-csv.rkt"
 		 "selection.rkt")
 
-(provide euclidean-dist)
+(provide euclidean-dist
+		 calc-dists
+		 k-closest)
 
 (: euclidean-dist ((Listof (Opt Number)) (Listof (Opt Number)) -> (Opt Number)))
 (define (euclidean-dist pt0 pt1)
@@ -16,5 +18,9 @@
 
 (: k-closest ((Listof (Pairof (Opt Number) Labelled)) Index -> (Listof (Pairof (Opt Number) Labelled))))
 (define (k-closest dists k)
-  ;(nth-element dists k Some-value
-  '())
+  (: sel ((Pairof (Opt Number) Labelled) -> Real))
+  (define (sel x)
+	(match (car x)
+		   [(Some a) (cast a Real)]
+		   [(None) 0]))
+  (take (nth-element dists k sel) k))

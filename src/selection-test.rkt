@@ -50,3 +50,31 @@
 	(check-equal? (list-ref result 2) 3 "2nd element should be 3.")
 	(check-true (andmap (lambda (x) (<= x 3)) (take result 2)) "Everything before 2nd element should be less than or equal to 3")
 	(check-true (andmap (lambda (x) (>= x 3)) (drop result 3)) "Everything after 2nd element should be greater than or equal to 3")))
+
+; modal
+(test-case
+  "all same"
+  (let ([data (list 3 3 3 3 3)])
+	(check-equal? (modal data identity) 3 "Modal should be 3.")))
+
+(test-case
+  "obvious winner"
+  (let ([data (list 2 5 3 1 3)])
+	(check-equal? (modal data identity) 3 "Modal should be 3.")))
+
+(test-case
+  "joint winners"
+  (let ([data (list 3 2 2 1 3)])
+	(check-true (or (equal? (modal data identity) 2)
+					(equal? (modal data identity) 3))
+				"Modal should be 2 or 3.")))
+
+(test-case
+  "no obvious winner"
+  (let ([data (list 4 2 3 1 5)])
+	(check-true (or (equal? (modal data identity) 1)
+					(equal? (modal data identity) 2)
+					(equal? (modal data identity) 3)
+					(equal? (modal data identity) 4)
+					(equal? (modal data identity) 5))
+				"Modal should be one of 1, 2, 3, 4 or 5.")))

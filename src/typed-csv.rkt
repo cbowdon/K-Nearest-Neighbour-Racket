@@ -1,13 +1,17 @@
 #lang typed/racket
 
 (provide csv->cells
+		 ; Opt
 		 Opt
 		 None
 		 Some
+		 Some?
+		 None?
 		 Some-value
 		 string->opt-num
 		 print-opt
 		 apply-opt
+		 ; Labelled
 		 Labelled
 		 Labelled-label
 		 Labelled-data
