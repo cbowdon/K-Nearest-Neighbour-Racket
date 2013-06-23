@@ -39,9 +39,19 @@
 		  [else (qs-iter (append eq gt) (append lower lt) higher)]))
   (qs-iter lst '() '()))
 
-(: modal (All (a b) ((Listof a) (a -> b) -> a)))
+(: modal (All (a b) ((Listof a) (a -> b) -> b)))
 (define (modal lst sel)
-  (: m-iter ((Listof a) (HashTable a Nonnegative-Integer) -> a))
+  (: hash-max ((HashTable b Nonnegative-Integer) -> b))
+  (define (hash-max h)
+	(let ([hl (hash->list h)])
+		(car 
+		  (foldl (lambda: ([x : (Pairof b Nonnegative-Integer)] [y : (Pairof b Nonnegative-Integer)])
+				   (cond [(> (cdr y) (cdr x)) y] [else x]))
+				 (car hl)
+				 hl))))
+  (: m-iter ((Listof a) (HashTable b Nonnegative-Integer) -> b))
   (define (m-iter in counts)
-	(car in))
-  (m-iter lst (make-hash)))
+	(cond [(null? in) (hash-max counts)]
+		  [(hash-has-key? counts (sel (car in))) (m-iter (cdr in) (hash-update counts (sel (car in)) add1))]
+		  [else (m-iter (cdr in) (hash-set counts (sel (car in)) 0))]))
+  (m-iter lst (make-immutable-hash)))
