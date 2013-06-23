@@ -24,9 +24,16 @@
 (define unclassified (map str->opt-list str-ul))
 
 ; K Nearest Neighbour algorithm
+; TODO move the below into knn.rkt
 (: k Index)
 (define k 5)
 
 (define test (car unclassified))
 
-;(modal (k-closest (calc-dists test classified) k))
+(: selector ((Pairof (Opt Number) Labelled) -> String))
+(define (selector x)
+  (Labelled-label (cdr x)))
+
+(modal (k-closest (calc-dists test classified) k) 
+	   selector)
+(car str-ul)
