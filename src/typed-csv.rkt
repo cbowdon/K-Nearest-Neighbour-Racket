@@ -9,6 +9,8 @@
 		 print-opt
 		 apply-opt
 		 Labelled
+		 Labelled-label
+		 Labelled-data
 		 LabelFix
 		 make-labelled
 		 print-labelled)

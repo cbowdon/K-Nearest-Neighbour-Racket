@@ -21,4 +21,3 @@
 			   (sqr (- 3 2))
 			   (sqr (- 4 1)))])
 	(check-equal? (Some-value q) r)))
-
