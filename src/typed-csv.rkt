@@ -1,16 +1,13 @@
-#lang typed/racket/base
-
-(require racket/file)
-(require racket/list)
-(require racket/function)
-(require racket/match)
+#lang typed/racket
 
 (provide csv->cells
 		 Opt
 		 None
 		 Some
+		 Some-value
 		 string->opt-num
 		 print-opt
+		 apply-opt
 		 Labelled
 		 LabelFix
 		 make-labelled
@@ -38,6 +35,16 @@
 		   [(Some a) (printf "Some ~a\n" a)]
 		   [(None) (printf "None\n")]))
 
+(: apply-opt ((Number Number -> Number) -> ((Opt Number) (Opt Number) -> (Opt Number))))
+(define (apply-opt proc)
+  (: opt-proc ((Opt Number) (Opt Number) -> (Opt Number)))
+  (define (opt-proc x0 x1)
+	(match* (x0 x1)
+		   [((None) (None)) (None)]
+		   [((Some a) (None)) (Some a)]
+		   [((None) (Some b)) (Some b)]
+		   [((Some a) (Some b)) (Some (proc a b))]))
+  opt-proc)
 
 ;; Labelled type
 (struct: Labelled ([label : String] [data : (Listof (Opt Number))]))

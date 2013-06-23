@@ -1,7 +1,4 @@
-#lang typed/racket/base
-
-(require racket/list
-		 racket/function)
+#lang typed/racket
 
 (provide quick-sort1
 		 quick-select
