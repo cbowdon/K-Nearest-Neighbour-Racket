@@ -41,5 +41,7 @@
 
 (: modal (All (a b) ((Listof a) (a -> b) -> a)))
 (define (modal lst sel)
-  ; TODO
-  (car lst))
+  (: m-iter ((Listof a) (HashTable a Nonnegative-Integer) -> a))
+  (define (m-iter in counts)
+	(car in))
+  (m-iter lst (make-hash)))
