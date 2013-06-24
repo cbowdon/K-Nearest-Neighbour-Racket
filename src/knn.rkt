@@ -5,7 +5,9 @@
 
 (provide euclidean-dist
 		 calc-dists
-		 k-closest)
+		 k-closest
+		 selector
+		 knn)
 
 (: euclidean-dist ((Listof (Opt Number)) (Listof (Opt Number)) -> (Opt Number)))
 (define (euclidean-dist pt0 pt1)
@@ -24,3 +26,14 @@
 		   [(Some a) (cast a Real)]
 		   [(None) 0]))
   (take (nth-element dists k sel) k))
+
+(: selector ((Pairof (Opt Number) Labelled) -> String))
+(define (selector x)
+  (Labelled-label (cdr x)))
+
+(: knn ((Listof (Opt Number)) (Listof Labelled) Index -> String))
+(define (knn unclassified classified-list k)
+	(modal (k-closest (calc-dists unclassified 
+								  classified-list) 
+					  k)
+		   selector))

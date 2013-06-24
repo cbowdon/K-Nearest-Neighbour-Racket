@@ -14,7 +14,7 @@
 (define classified (map (lambda: ([x : (Listof String)]) (make-labelled x #:fix 'post)) str-cl))
 
 (: str-ul (Listof (Listof String)))
-(define str-ul (csv->cells (string->path "data/classified.csv")))
+(define str-ul (csv->cells (string->path "data/unclassified.csv")))
 
 (: str->opt-list ((Listof String) -> (Listof (Opt Number))))
 (define (str->opt-list x)
@@ -23,17 +23,16 @@
 (: unclassified (Listof (Listof (Opt Number))))
 (define unclassified (map str->opt-list str-ul))
 
-; K Nearest Neighbour algorithm
-; TODO move the below into knn.rkt
+; Apply algorithm to data
 (: k Index)
 (define k 5)
 
-(define test (car unclassified))
+(define results
+  (map (lambda: ([x : (Listof (Opt Number))]) (knn x classified k))
+	   unclassified))
 
-(: selector ((Pairof (Opt Number) Labelled) -> String))
-(define (selector x)
-  (Labelled-label (cdr x)))
-
-(modal (k-closest (calc-dists test classified) k) 
-	   selector)
-(car str-ul)
+; display
+(displayln "Actual:")
+(for-each displayln str-ul)
+(displayln "Estimated:")
+(for-each displayln results)
